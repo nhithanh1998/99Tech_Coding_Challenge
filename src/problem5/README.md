@@ -27,7 +27,7 @@ NodeJS TypeScript Server for managing items.
 
     ```env
     PORT=3000
-    MONGODB_URI=mongodb+srv://nhithanh123vnn:nhithanh123@clusternhithanh.yolqn4n.mongodb.net/itemDB?retryWrites=true&w=majority&appName=ClusterNhiThanh
+    MONGODB_URI=mongodb+srv://nhithanh123vnn:????@clusternhithanh.yolqn4n.mongodb.net/itemDB?retryWrites=true&w=majority&appName=ClusterNhiThanh
     ```
 
 3.  Build and start the server:

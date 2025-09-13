@@ -1,10 +1,77 @@
-# 99Tech Code Challenge #1 #
+# 99Tech Coding Challenge
 
-Note that if you fork this repository, your responses may be publicly linked to this repo.  
-Please submit your application along with the solutions attached or linked.   
+Thank you for taking the time to review my work. This document will help you quickly understand what’s here, how to run it, and how to assess the implementation.
 
-It is important that you minimally attempt the problems, even if you do not arrive at a working solution.
+---
 
-## Submission ##
-You can either provide a link to an online repository, attach the solution in your application, or whichever method you prefer.
-We're cool as long as we can view your solution without any pain.
+## 📂 Project Structure
+
+```
+/
+├── src/
+│   └── problem4/   # A SumToN challenge
+│   └── problem5/   # A CrudeServer challenge
+│   └── problem6/   # An Architecture challenge
+├── jest.config.js  # Configuration for tests
+├── tsconfig.json   # TypeScript configuration
+├── package.json    # Dependencies, scripts
+├── package-lock.json
+├── .gitignore
+└── README.md       # (this file)
+```
+
+## ⚙️ How to Run
+
+### Challenge 4: Three ways to sum to n
+
+1. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+2. **Run test**
+
+   ```bash
+   npm test
+   ```
+
+This uses Jest to verify behavior as per the assignment requirements.
+
+- Implementation: `src/problem4/sumToN.ts`
+- Unit tests: `src/problem4/sumtoN.test.ts`
+
+### Challenge 5: A Crude Server Challenged
+
+1. **Go to the problem 5 directory**
+
+   ```bash
+   cd src/problem5
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run build**
+
+   ```bash
+   npm run build
+   ```
+
+4. **Start API Server local**
+
+   ```bash
+   npm start
+   ```
+
+---
+
+## 📋 Usage / Assumptions
+
+- Node.js v14+ required.
+- Tests written in Jest.
+- Each challenge is self-contained under its respective directory.
+- Challenge 6 is an architecture design specification and does not require execution.
