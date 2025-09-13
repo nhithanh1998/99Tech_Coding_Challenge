@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import Item from "../models/itemModel";
+import { FilterQuery } from "mongoose";
+import { ItemDocument } from "../models/itemModel"; // adjust to your model type
 
 /**
  * Creates a new Item and saves it to the database.
@@ -10,7 +12,7 @@ import Item from "../models/itemModel";
  * Validations:
  * - name and price are required.
  * - price must be a number.
- *
+ * - category is optional.
  * Responses:
  * - 201: Successfully created the item.
  * - 400: Bad request (validation errors).
@@ -19,7 +21,7 @@ import Item from "../models/itemModel";
 export const createItem = async (req: Request, res: Response) => {
   try {
     const { name, category, price } = req.body;
-
+    // Validate name
     if (name == null || price == null) {
       return res.status(400).json({ error: "Name and price are required!" });
     }
@@ -42,23 +44,41 @@ export const createItem = async (req: Request, res: Response) => {
 };
 
 /**
- * Fetches a list of items from the database with optional filters.
+ * Get a list of items from the database with optional filters and pagination.
  *
  * Query Parameters:
  * - category (string): filter by item category.
  * - isDeleted (string "true"|"false"): filter by deletion status.
- * - name (string): partial case-insensitive match on item name.
+ * - name (string): item name.
+ * - page (number, default=1): page number for pagination (must be >= 1).
+ * - limit (number, default=10): number of items per page (must be >= 1).
  *
  * Responses:
- * - 200: Successfully fetched the items.
+ * - 200: Successfully get the items with pagination metadata.
+ * - 400: Invalid query parameters.
  * - 500: Internal server error.
  */
-export const listItems = async (req: Request, res: Response) => {
+export const getItems = async (req: Request, res: Response) => {
   try {
-    const { category, isDeleted, name } = req.query;
+    const { category, isDeleted, name, page = "1", limit = "10" } = req.query;
 
-    // Build filter object
-    const filters: Record<string, any> = {};
+    // Validate pagination parameters
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+
+    if (isNaN(pageNum) || pageNum < 1) {
+      return res
+        .status(400)
+        .json({ error: "Invalid 'page'. Must be a positive integer." });
+    }
+
+    if (isNaN(limitNum) || limitNum < 1) {
+      return res
+        .status(400)
+        .json({ error: "Invalid 'limit'. Must be a positive integer." });
+    }
+
+    const filters: FilterQuery<ItemDocument> = {};
 
     if (category) filters.category = category;
     if (isDeleted !== undefined) {
@@ -68,10 +88,23 @@ export const listItems = async (req: Request, res: Response) => {
       filters.name = { $regex: new RegExp(name as string, "i") };
     }
 
-    // Fetch items from database
-    const items = await Item.find(filters);
+    const skip = (pageNum - 1) * limitNum;
 
-    return res.status(200).json(items);
+    // Fetch items and total count
+    const [items, total] = await Promise.all([
+      Item.find(filters).skip(skip).limit(limitNum),
+      Item.countDocuments(filters),
+    ]);
+
+    return res.status(200).json({
+      data: items,
+      pagination: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
+      },
+    });
   } catch (error) {
     console.error("Error fetching items:", error);
     return res.status(500).json({ error: "Failed to fetch items." });
