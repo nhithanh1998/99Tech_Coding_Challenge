@@ -47,24 +47,30 @@ NodeJS TypeScript Server for managing items.
 
 ### Items
 
-- `POST /items`: Create a new item
-- `GET /items`: List items (with filters:
+- `POST /api/items`: Create a new item
+- `GET /api/items`: List items (with filters:
   `?category=string&isDeleted=false&name=itemName`)
-- `GET /items/:id`: Get item by ID
-- `PUT /items/:id`: Update an item (replace all fields)
-- `PATCH /items/:id`: Partially update an item
-- `DELETE /items/:id`: Soft delete an item (set `isDeleted: true`)
+- `GET /api/items/:id`: Get item by ID
+- `PUT /api/items/:id`: Update an item (replace all fields)
+- `PATCH /api/items/:id`: Partially update an item
+- `DELETE /api/items/:id`: Soft delete an item (set `isDeleted: true`)
 
 ## Example Request
 
 ```bash
-curl -X POST http://localhost:3000/items \
+curl -X POST http://localhost:3000/api/items \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Samsung TV",
     "category": "Television",
     "price": 300
   }'
+```
+
+## For Open API with interaction UI
+
+```bash
+http://localhost:3000/api-docs
 ```
 
 ## Development

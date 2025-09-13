@@ -116,13 +116,6 @@ const router = Router();
  *           minimum: 1
  *           default: 10
  *         description: Items per page
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [asc, desc]
- *           default: asc
- *         description: Sort direction
  *     responses:
  *       200:
  *         description: List of items with pagination
